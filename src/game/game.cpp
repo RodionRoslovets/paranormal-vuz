@@ -42,8 +42,9 @@ bool Game::init() {
     }
 
     ghost.init(mRenderer);
+    player.init(mRenderer);
 
-     if (!ghost.isInited) {
+     if (!ghost.isInited || !player.isInited) {
         return false;
     }
 
@@ -54,6 +55,9 @@ void Game::run() {
     bool quit = false;
     int ghostX = 0;
     int ghostY = 0;
+    int playerX = 400;
+    int playerY = 400;
+    int playerRotate = 0;
 
     SDL_Event e;
 
@@ -67,19 +71,23 @@ void Game::run() {
                 switch (e.key.keysym.scancode) {
                     case KEY_CODES::UP:
                         std::cout << "Up pressed"  << std::endl;
-                        ghostY -= 2;
+                        playerY -= 2;
+                        playerRotate = -90;
                         break;
                     case KEY_CODES::DOWN:
                         std::cout << "Down pressed"  << std::endl;
-                        ghostY += 2;
+                        playerY += 2;
+                        playerRotate = 90;
                         break;
                     case KEY_CODES::LEFT:
                         std::cout << "Left pressed"  << std::endl;
-                        ghostX -= 2;
+                        playerX -= 2;
+                        playerRotate = -180;
                         break;
                     case KEY_CODES::RIGHT:
                         std::cout << "Right pressed"  << std::endl;
-                        ghostX += 2;
+                        playerX += 2;
+                        playerRotate = 0;
                         break;
                     case KEY_CODES::SPACE:
                         std::cout << "Space pressed"  << std::endl;
@@ -97,6 +105,7 @@ void Game::run() {
 
         // SDL_RenderCopy(mRenderer, , NULL, &dstRect);
         ghost.render(mRenderer, ghostX, ghostY);
+        player.render(mRenderer, playerX, playerY, playerRotate);
 
         SDL_RenderPresent(mRenderer);
     }

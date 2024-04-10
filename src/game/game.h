@@ -2,6 +2,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 #include <ghost.cpp>
+#include <player.cpp>
 
 class Game {
 public:
@@ -15,4 +16,5 @@ private:
     SDL_Window* mWindow;
     SDL_Renderer* mRenderer;
     Ghost ghost;
+    Player player;
 };
