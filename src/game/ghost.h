@@ -1,6 +1,13 @@
+
+#include <SDL2/SDL.h>
 class Ghost{
     private:
-        int num;
+        SDL_Texture* texture;
     public:
-        void hello();
+        Ghost();
+        ~Ghost();
+        
+        bool isInited;
+        int init(SDL_Renderer* renderer);
+        void render(SDL_Renderer* renderer, int x, int y);
 };
