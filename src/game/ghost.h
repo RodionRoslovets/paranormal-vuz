@@ -10,4 +10,6 @@ class Ghost{
         bool isInited;
         int init(SDL_Renderer* renderer);
         void render(SDL_Renderer* renderer, int x, int y);
+        int width;
+        int height;
 };

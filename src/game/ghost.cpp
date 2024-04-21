@@ -26,11 +26,13 @@ int Ghost::init(SDL_Renderer* renderer){
     SDL_FreeSurface(loadedSurface);
 
     this->isInited = true;
+    this->width = 100;
+    this->height = 100;
 
     return 0;
 };
 
 void Ghost::render(SDL_Renderer* renderer, int x, int y) {
-    SDL_Rect renderRect = { x, y, 100, 100 };
+    SDL_Rect renderRect = { x, y, this->width, this->height };
     SDL_RenderCopy(renderer, texture, NULL, &renderRect);
 }

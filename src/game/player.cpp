@@ -26,14 +26,13 @@ int Player::init(SDL_Renderer* renderer){
     SDL_FreeSurface(loadedSurface);
 
     this->isInited = true;
+    this->width = 100;
+    this->height = 100;
 
     return 0;
 };
 
 void Player::render(SDL_Renderer* renderer, int x, int y, int degreese) {
-    this->width = 100;
-    this->height = 100;
     SDL_Rect renderRect = { x, y, this->width, this->height };
-    // SDL_RenderCopy(renderer, texture, NULL, &renderRect);
     SDL_RenderCopyEx(renderer, texture, NULL, &renderRect, degreese, NULL, SDL_FLIP_NONE);
 }
