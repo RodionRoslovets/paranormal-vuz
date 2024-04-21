@@ -1,7 +1,4 @@
 #include "Game.h"
-#include <ctime>
-#include <vector>
-#include <cmath>
 
 enum KEY_CODES {
     SPACE = 44,
@@ -25,7 +22,6 @@ struct Point {
 Game::Game() : mWindow(nullptr), mRenderer(nullptr) {}
 
 Game::~Game() {
-    // SDL_DestroyTexture(ghostTexture);
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     IMG_Quit();
@@ -185,8 +181,6 @@ void Game::run() {
                 currentPointIndex = (currentPointIndex + 1) % points.size();
             }
         }
-
-       
 
         Uint32 currentTime = SDL_GetTicks();
 
