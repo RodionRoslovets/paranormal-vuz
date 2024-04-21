@@ -36,3 +36,45 @@ void Player::render(SDL_Renderer* renderer, int x, int y, int degreese) {
     SDL_Rect renderRect = { x, y, this->width, this->height };
     SDL_RenderCopyEx(renderer, texture, NULL, &renderRect, degreese, NULL, SDL_FLIP_NONE);
 }
+
+void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rotate, int screenWidth, int screenHeight){
+    switch (keyCode) {
+        case KEY_CODES::UP:
+            std::cout << "Up pressed"  << std::endl;
+            if(posY == 0){
+                break;
+            }
+            posY -= step;
+            rotate = -90;
+            break;
+        case KEY_CODES::DOWN:
+            std::cout << "Down pressed"  << std::endl;
+            if(posY == screenHeight - this->height){
+                break;
+            }
+            posY += step;
+            rotate = 90;
+            break;
+        case KEY_CODES::LEFT:
+            std::cout << "Left pressed"  << std::endl;
+            if(posX == 0){
+                break;
+            }
+            posX -= step;
+            rotate = -180;
+            break;
+        case KEY_CODES::RIGHT:
+            std::cout << "Right pressed"  << std::endl;
+            if(posX == screenWidth - this->width){
+                break;
+            }
+            posX += step;
+            rotate = 0;
+            break;
+        case KEY_CODES::SPACE:
+            std::cout << "Space pressed"  << std::endl;
+            break;
+        default:
+            break;
+    }
+}

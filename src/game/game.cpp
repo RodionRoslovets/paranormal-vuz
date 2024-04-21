@@ -1,13 +1,5 @@
 #include "Game.h"
 
-enum KEY_CODES {
-    SPACE = 44,
-    UP = 82,
-    DOWN = 81,
-    LEFT = 80,
-    RIGHT = 79,
-};
-
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
 const int PLAYER_MOVE_STEP = 10;
@@ -109,7 +101,7 @@ void Game::run() {
     size_t currentPointIndex = 0;
     int ghostX = 0;
     int ghostY = 0;
-    int playerX = 400;
+    int playerX= 400;
     int playerY = 400;
     int playerRotate = 0;
     bool animationStopped = false;
@@ -127,45 +119,7 @@ void Game::run() {
             }
 
             if(e.type == SDL_KEYDOWN){
-                switch (e.key.keysym.scancode) {
-                    case KEY_CODES::UP:
-                        std::cout << "Up pressed"  << std::endl;
-                        if(playerY == 0){
-                            break;
-                        }
-                        playerY -= PLAYER_MOVE_STEP;
-                        playerRotate = -90;
-                        break;
-                    case KEY_CODES::DOWN:
-                        std::cout << "Down pressed"  << std::endl;
-                        if(playerY == WINDOW_HEIGHT - player.height){
-                            break;
-                        }
-                        playerY += PLAYER_MOVE_STEP;
-                        playerRotate = 90;
-                        break;
-                    case KEY_CODES::LEFT:
-                        std::cout << "Left pressed"  << std::endl;
-                        if(playerX == 0){
-                            break;
-                        }
-                        playerX -= PLAYER_MOVE_STEP;
-                        playerRotate = -180;
-                        break;
-                    case KEY_CODES::RIGHT:
-                        std::cout << "Right pressed"  << std::endl;
-                        if(playerX == WINDOW_WIDTH - player.width){
-                            break;
-                        }
-                        playerX += PLAYER_MOVE_STEP;
-                        playerRotate = 0;
-                        break;
-                    case KEY_CODES::SPACE:
-                        std::cout << "Space pressed"  << std::endl;
-                        break;
-                    default:
-                        break;
-                }
+                player.move(e.key.keysym.scancode, playerX, playerY, PLAYER_MOVE_STEP, playerRotate, WINDOW_WIDTH, WINDOW_HEIGHT);
             }
         }
 
