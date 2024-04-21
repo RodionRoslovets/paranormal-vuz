@@ -4,6 +4,7 @@
 #include <iostream>
 #include <ghost.cpp>
 #include <player.cpp>
+#include <menu.cpp>
 #include <ctime>
 #include <vector>
 #include <cmath>
@@ -21,4 +22,5 @@ private:
     SDL_Renderer* mRenderer;
     Ghost ghost;
     Player player;
+    Menu menu;
 };

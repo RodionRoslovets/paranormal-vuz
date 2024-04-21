@@ -17,6 +17,7 @@ Game::~Game() {
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);
     IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
 }
 
@@ -29,6 +30,11 @@ bool Game::init() {
     if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
         std::cerr << "SDL_Image could not initialize! SDL_Image Error: " << IMG_GetError() << std::endl;
         return false;
+    }
+
+    if (TTF_Init() != 0) {
+        std::cerr << "TTF initialization failed: " << TTF_GetError() << std::endl;
+        return 1;
     }
 
     mWindow = SDL_CreateWindow("SDL Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
