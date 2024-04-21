@@ -31,7 +31,9 @@ int Player::init(SDL_Renderer* renderer){
 };
 
 void Player::render(SDL_Renderer* renderer, int x, int y, int degreese) {
-    SDL_Rect renderRect = { x, y, 100, 100 };
+    this->width = 100;
+    this->height = 100;
+    SDL_Rect renderRect = { x, y, this->width, this->height };
     // SDL_RenderCopy(renderer, texture, NULL, &renderRect);
     SDL_RenderCopyEx(renderer, texture, NULL, &renderRect, degreese, NULL, SDL_FLIP_NONE);
 }

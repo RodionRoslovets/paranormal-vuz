@@ -8,6 +8,10 @@ enum KEY_CODES {
     RIGHT = 79,
 };
 
+const int WINDOW_WIDTH = 1280;
+const int WINDOW_HEIGHT = 720;
+const int PLAYER_MOVE_STEP = 10;
+
 Game::Game() : mWindow(nullptr), mRenderer(nullptr) {}
 
 Game::~Game() {
@@ -29,7 +33,7 @@ bool Game::init() {
         return false;
     }
 
-    mWindow = SDL_CreateWindow("SDL Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_SHOWN);
+    mWindow = SDL_CreateWindow("SDL Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (mWindow == nullptr) {
         std::cerr << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
         return false;
@@ -71,22 +75,34 @@ void Game::run() {
                 switch (e.key.keysym.scancode) {
                     case KEY_CODES::UP:
                         std::cout << "Up pressed"  << std::endl;
-                        playerY -= 2;
+                        if(playerY == 0){
+                            break;
+                        }
+                        playerY -= PLAYER_MOVE_STEP;
                         playerRotate = -90;
                         break;
                     case KEY_CODES::DOWN:
                         std::cout << "Down pressed"  << std::endl;
-                        playerY += 2;
+                        if(playerY == WINDOW_HEIGHT - player.height){
+                            break;
+                        }
+                        playerY += PLAYER_MOVE_STEP;
                         playerRotate = 90;
                         break;
                     case KEY_CODES::LEFT:
                         std::cout << "Left pressed"  << std::endl;
-                        playerX -= 2;
+                        if(playerX == 0){
+                            break;
+                        }
+                        playerX -= PLAYER_MOVE_STEP;
                         playerRotate = -180;
                         break;
                     case KEY_CODES::RIGHT:
                         std::cout << "Right pressed"  << std::endl;
-                        playerX += 2;
+                        if(playerX == WINDOW_WIDTH - player.width){
+                            break;
+                        }
+                        playerX += PLAYER_MOVE_STEP;
                         playerRotate = 0;
                         break;
                     case KEY_CODES::SPACE:
