@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "item.cpp"
 
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
@@ -10,6 +11,8 @@ struct Point {
     int x;
     int y;
 };
+
+Item item;
 
 Game::Game() : mWindow(nullptr), mRenderer(nullptr) {}
 
@@ -51,6 +54,7 @@ bool Game::init() {
 
     ghost.init(mRenderer);
     player.init(mRenderer);
+    item.init(mRenderer);
 
      if (!ghost.isInited || !player.isInited) {
         return false;
@@ -155,6 +159,7 @@ void Game::run() {
 
         player.render(mRenderer, playerX, playerY, playerRotate);
         ghost.render(mRenderer, ghostX, ghostY);
+        item.render(mRenderer, points[0].x, points[0].y);
 
         SDL_RenderPresent(mRenderer);
     }
