@@ -40,7 +40,6 @@ void Player::render(SDL_Renderer* renderer, int x, int y, int degreese) {
 void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rotate, int screenWidth, int screenHeight) {
     switch (keyCode) {
         case KEY_CODES::UP:
-            std::cout << "Up pressed"  << std::endl;
             rotate = -90;
             if(posY == 0){
                 break;
@@ -56,7 +55,6 @@ void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rot
             posY -= step;
             break;
         case KEY_CODES::DOWN:
-            std::cout << "Down pressed"  << std::endl;
             rotate = 90;
             if(posY == screenHeight - this->height){
                 break;
@@ -70,7 +68,6 @@ void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rot
             posY += step;
             break;
         case KEY_CODES::LEFT:
-            std::cout << "Left pressed"  << std::endl;
             rotate = -180;
             if(posX == 0){
                 break;
@@ -84,7 +81,6 @@ void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rot
             posX -= step;
             break;
         case KEY_CODES::RIGHT:
-            std::cout << "Right pressed"  << std::endl;
             rotate = 0;
             if(posX == screenWidth - this->width){
                 break;
