@@ -7,12 +7,8 @@ const int PLAYER_MOVE_STEP = 10;
 const int GHOST_MOVE_STEP = 1;
 const int ROUND_TIME = 60000;
 
-struct Point {
-    int x;
-    int y;
-};
-
-Item item;
+std::vector<FurnitureItem> items;
+int numPoints = 5;
 
 Game::Game() : mWindow(nullptr), mRenderer(nullptr) {}
 
@@ -54,18 +50,32 @@ bool Game::init() {
 
     ghost.init(mRenderer);
     player.init(mRenderer);
-    item.init(mRenderer);
 
-     if (!ghost.isInited || !player.isInited) {
+    for (int i = 0; i < numPoints; ++i) {
+        FurnitureItem item;
+        item.item.init(mRenderer);
+
+        if(!item.item.isInited){
+            std::cerr << "Item could not be created! SDL Error: " << SDL_GetError() << std::endl;
+            return false;
+        }
+
+        item.coords.x = 0;
+        item.coords.y = 0;
+
+        items.push_back(item);
+    }
+
+    if (!ghost.isInited || !player.isInited) {
         return false;
     }
 
     return true;
 }
 
-std::vector<Point> generatePoints(int numPoints, int imgWidth, int imgHeight) {
+void generatePoints(int numPoints, int imgWidth, int imgHeight) {
     std::vector<Point> points;
-    const int minDistance = 150; // Минимальное расстояние между точками
+    const int minDistance = 150;
 
     for (int i = 0; i < numPoints; ++i) {
         int x, y;
@@ -76,29 +86,23 @@ std::vector<Point> generatePoints(int numPoints, int imgWidth, int imgHeight) {
             x = std::rand() % (WINDOW_WIDTH - imgWidth);
             y = std::rand() % (WINDOW_HEIGHT - imgHeight);
 
-            validPoint = true; // Предполагаем, что точка допустима, и проверим это ниже
+            validPoint = true;
 
             // Проверяем новую точку на расстояние до уже существующих точек
             for (const auto& existingPoint : points) {
                 int dx = x - existingPoint.x;
                 int dy = y - existingPoint.y;
                 if (std::sqrt(std::pow(dx, 2) + std::pow(dy, 2)) < minDistance) {
-                    validPoint = false; // Если расстояние меньше minDistance, точка недопустима
-                    break; // Прерываем цикл, чтобы не проверять остальные точки
+                    validPoint = false; 
+                    break; 
                 }
             }
         }
 
-        // Добавляем допустимую точку в массив
         points.push_back({x, y});
-    }
-    return points;
-}
 
-void printPoints(const std::vector<Point>& points) {
-    std::cout << "Array of coordinates:" << std::endl;
-    for (const auto& point : points) {
-        std::cout << "(" << point.x << ", " << point.y << ")" << std::endl;
+        items[i].coords.x = x;
+        items[i].coords.y = y;
     }
 }
 
@@ -106,8 +110,7 @@ void Game::run() {
     std::srand(std::time(nullptr));
 
     bool quit = false;
-    int numPoints = 5; // Number of points
-    std::vector<Point> points = generatePoints(numPoints, ghost.width, ghost.height);
+    generatePoints(items.size(), ghost.width, ghost.height);
     size_t currentPointIndex = 0;
     int ghostX = 0;
     int ghostY = 0;
@@ -115,8 +118,7 @@ void Game::run() {
     int playerY = 400;
     int playerRotate = 0;
     bool animationStopped = false;
-
-    printPoints(points);
+    player.setItems(&items);
 
     SDL_Event e;
 
@@ -134,15 +136,16 @@ void Game::run() {
         }
 
         if (!animationStopped) {
-            if (ghostX != points[currentPointIndex].x) {
-                ghostX += (points[currentPointIndex].x - ghostX) > 0 ? GHOST_MOVE_STEP : -GHOST_MOVE_STEP;
+            if (ghostX != items[currentPointIndex].coords.x) {
+                ghostX += (items[currentPointIndex].coords.x - ghostX) > 0 ? GHOST_MOVE_STEP : -GHOST_MOVE_STEP;
             }
-            if (ghostY != points[currentPointIndex].y) {
-                ghostY += (points[currentPointIndex].y - ghostY) > 0 ? GHOST_MOVE_STEP : -GHOST_MOVE_STEP;
+            if (ghostY != items[currentPointIndex].coords.y) {
+                ghostY += (items[currentPointIndex].coords.y - ghostY) > 0 ? GHOST_MOVE_STEP : -GHOST_MOVE_STEP;
             }
 
-            if (ghostX == points[currentPointIndex].x && ghostY == points[currentPointIndex].y) {
-                currentPointIndex = (currentPointIndex + 1) % points.size();
+            if (ghostX == items[currentPointIndex].coords.x && ghostY == items[currentPointIndex].coords.y) {
+                items[currentPointIndex].item.dropped = true;
+                currentPointIndex = (currentPointIndex + 1) % items.size();
             }
         }
 
@@ -159,7 +162,10 @@ void Game::run() {
 
         player.render(mRenderer, playerX, playerY, playerRotate);
         ghost.render(mRenderer, ghostX, ghostY);
-        item.render(mRenderer, points[0].x, points[0].y);
+
+        for(int i = 0; i < items.size(); ++i){
+            items[i].item.render(mRenderer, items[i].coords.x, items[i].coords.y);
+        }
 
         SDL_RenderPresent(mRenderer);
     }

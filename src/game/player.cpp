@@ -37,7 +37,8 @@ void Player::render(SDL_Renderer* renderer, int x, int y, int degreese) {
     SDL_RenderCopyEx(renderer, texture, NULL, &renderRect, degreese, NULL, SDL_FLIP_NONE);
 }
 
-void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rotate, int screenWidth, int screenHeight){
+void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rotate, int screenWidth, int screenHeight) {
+
     switch (keyCode) {
         case KEY_CODES::UP:
             std::cout << "Up pressed"  << std::endl;
@@ -72,7 +73,18 @@ void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rot
             rotate = 0;
             break;
         case KEY_CODES::SPACE:
-            std::cout << "Space pressed"  << std::endl;
+             for (auto it = this->begin(); it != this->end(); ++it) {
+                std::cout << "Координаты: (" << it->coords.x  << ", " << it->coords.y << ")" << std::endl;
+
+                if (posX + 100 < it -> coords.x || it -> coords.x + 100 < posX)
+                    continue;
+                
+                if (posY + 100 < it -> coords.y || it -> coords.y + 100 < posY)
+                    continue;
+                
+                it -> item.dropped = false;
+            }
+
             break;
         default:
             break;

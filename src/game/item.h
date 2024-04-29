@@ -3,7 +3,7 @@
 class Item{
     private:
         SDL_Texture* texture;
-        SDL_Texture* texture2;
+        SDL_Texture* textureDropped;
     public:
         Item();
         ~Item();
