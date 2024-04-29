@@ -10,44 +10,15 @@ const int ROUND_TIME = 3000;
 std::vector<FurnitureItem> items;
 int numPoints = 5;
 
-Game::Game() : mWindow(nullptr), mRenderer(nullptr) {}
+Game::Game() {}
 
 Game::~Game() {
-    SDL_DestroyRenderer(mRenderer);
-    SDL_DestroyWindow(mWindow);
     IMG_Quit();
     TTF_Quit();
     SDL_Quit();
 }
 
-bool Game::init() {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr << "SDL could not initialize! SDL Error: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-        std::cerr << "SDL_Image could not initialize! SDL_Image Error: " << IMG_GetError() << std::endl;
-        return false;
-    }
-
-    if (TTF_Init() != 0) {
-        std::cerr << "TTF initialization failed: " << TTF_GetError() << std::endl;
-        return 1;
-    }
-
-    mWindow = SDL_CreateWindow("SDL Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    if (mWindow == nullptr) {
-        std::cerr << "Window could not be created! SDL Error: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
-    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
-    if (mRenderer == nullptr) {
-        std::cerr << "Renderer could not be created! SDL Error: " << SDL_GetError() << std::endl;
-        return false;
-    }
-
+bool Game::init(SDL_Window* mWindow, SDL_Renderer* mRenderer) {
     ghost.init(mRenderer);
     player.init(mRenderer);
 
@@ -169,7 +140,7 @@ void Game::saveResult(Uint32 gameTime) {
     outFile.close();
 }
 
-void Game::run() {
+void Game::run(SDL_Window* mWindow, SDL_Renderer* mRenderer) {
     std::srand(std::time(nullptr));
 
     bool quit = false;
@@ -247,7 +218,7 @@ void Game::run() {
         for(int i = 0; i < items.size(); ++i){
             items[i].item.render(mRenderer, items[i].coords.x, items[i].coords.y);
         }
-
+        
         SDL_RenderPresent(mRenderer);
     }
 }

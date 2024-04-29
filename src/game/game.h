@@ -4,7 +4,6 @@
 #include <iostream>
 #include <ghost.cpp>
 #include <player.cpp>
-#include <menu.cpp>
 #include <ctime>
 #include <vector>
 #include <cmath>
@@ -18,15 +17,12 @@ public:
     Game();
     ~Game();
 
-    bool init();
-    void run();
+    bool init(SDL_Window* mWindow, SDL_Renderer* mRenderer);
+    void run(SDL_Window* mWindow, SDL_Renderer* mRenderer);
 
 private:
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
     Ghost ghost;
     Player player;
-    Menu menu;
     int level;
     void saveResult(Uint32 gameTime);
 };
