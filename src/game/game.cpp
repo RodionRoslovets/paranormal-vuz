@@ -5,7 +5,7 @@ const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
 const int PLAYER_MOVE_STEP = 10;
 const int GHOST_MOVE_STEP = 1;
-const int ROUND_TIME = 30000;
+const int ROUND_TIME = 3000;
 
 std::vector<FurnitureItem> items;
 int numPoints = 5;
@@ -118,6 +118,57 @@ bool checkCollision(int x, int y, const FurnitureItem& target) {
     return false;
 }
 
+void Game::saveResult(Uint32 gameTime) {
+    std::ifstream inFile("best-results.txt");
+    if (!inFile.is_open()) {
+        std::cout << "File not found, creating new one..." << std::endl;
+        std::ofstream createFile("best-results.txt");
+        createFile.close();
+        inFile.open("best-results.txt");
+    }
+
+    std::vector<double> secondsVec;
+
+    std::string line;
+    while (std::getline(inFile, line)) {
+        size_t dashPos = line.find('-');
+        if (dashPos == std::string::npos) {
+            std::cerr << "Invalid format: " << line << std::endl;
+            continue;
+        }
+
+        size_t secPos = line.find("sec");
+        if (secPos == std::string::npos) {
+            std::cerr << "Invalid format: " << line << std::endl;
+            continue;
+        }
+
+        std::string secondsStr = line.substr(dashPos + 2, secPos - dashPos - 3);
+
+        // Конвертируем строку в double и добавляем в вектор
+        double seconds = std::stod(secondsStr);
+        secondsVec.push_back(seconds);
+    }
+
+    inFile.close();
+
+    secondsVec.push_back(std::round(gameTime / 100) / 10.0);
+
+    std::sort(secondsVec.rbegin(), secondsVec.rend());
+
+    std::ofstream outFile("best-results.txt");
+    if (!outFile.is_open()) {
+        std::cerr << "Failed to open file for writing results." << std::endl;
+        return;
+    }
+
+    for (size_t i = 0; i < std::min(secondsVec.size(), static_cast<size_t>(10)); ++i) {
+        outFile << "Place " << i + 1 << " - " << secondsVec[i] << " sec" << std::endl;
+    }
+
+    outFile.close();
+}
+
 void Game::run() {
     std::srand(std::time(nullptr));
 
@@ -135,7 +186,8 @@ void Game::run() {
 
     SDL_Event e;
 
-    Uint32 startTime = SDL_GetTicks();
+    Uint32 roundStartTime = SDL_GetTicks();
+    Uint32 gameStartTime = SDL_GetTicks();
 
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
@@ -171,12 +223,16 @@ void Game::run() {
 
             if (allDropped) {
                 animationStopped = true;
+
+                Uint32 gameEndTime = SDL_GetTicks();
+                std::cout << "Game over. Total time: " << gameEndTime - gameStartTime << std::endl;
+                this->saveResult(gameEndTime - gameStartTime);
             }
         }
 
         Uint32 currentTime = SDL_GetTicks();
-        if (currentTime - startTime >= ROUND_TIME) { 
-            startTime = SDL_GetTicks();
+        if (currentTime - roundStartTime >= ROUND_TIME) { 
+            roundStartTime = SDL_GetTicks();
             this -> level += 1;
         }
 
@@ -195,3 +251,4 @@ void Game::run() {
         SDL_RenderPresent(mRenderer);
     }
 }
+

@@ -8,6 +8,10 @@
 #include <ctime>
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <algorithm>
+#include <iomanip>
+#include <set>
 
 class Game {
 public:
@@ -24,4 +28,5 @@ private:
     Player player;
     Menu menu;
     int level;
+    void saveResult(Uint32 gameTime);
 };

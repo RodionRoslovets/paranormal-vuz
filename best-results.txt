@@ -1,0 +1,10 @@
+Place 1 - 12.1 sec
+Place 2 - 11.9 sec
+Place 3 - 11.7 sec
+Place 4 - 10.7 sec
+Place 5 - 10.1 sec
+Place 6 - 9.9 sec
+Place 7 - 9.6 sec
+Place 8 - 9.3 sec
+Place 9 - 8.9 sec
+Place 10 - 8.8 sec
