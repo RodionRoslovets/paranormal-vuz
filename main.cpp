@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <typeinfo>
 #include "game.cpp"
+#include "menu.cpp"
 
 int main(int argc, char* args[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -31,12 +32,19 @@ int main(int argc, char* args[]) {
         return false;
     }
 
-    Game game;
-    if (!game.init(mWindow,  mRenderer)) {
-        std::cerr << "Failed to initialize the game!" << std::endl;
-        return -1;
+    Menu menu;
+    menu.init(mRenderer);
+
+    if(menu.run()){
+        Game game;
+        if (!game.init(mWindow,  mRenderer)) {
+            std::cerr << "Failed to initialize the game!" << std::endl;
+            return -1;
+        }
+        game.run(mWindow, mRenderer);
     }
-    game.run(mWindow, mRenderer);
+
+    
 
     SDL_DestroyRenderer(mRenderer);
     SDL_DestroyWindow(mWindow);

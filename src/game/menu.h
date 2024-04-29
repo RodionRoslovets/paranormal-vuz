@@ -9,7 +9,7 @@ public:
     ~Menu();
 
     void init(SDL_Renderer* renderer);
-    void run();
+    bool run();
     void navigate(int code);
     void renderMenu();
 
@@ -19,6 +19,5 @@ private:
     SDL_Color m_textColor;
     std::vector<std::string> m_options;
     int m_selectedIndex;
-
-
+    SDL_Color m_highlightColor;
 };
