@@ -158,11 +158,22 @@ void Game::run() {
                 items[currentPointIndex].item.dropped = true;
                 currentPointIndex = (currentPointIndex + 1) % items.size();
             }
+
+            bool allDropped = true;
+            for (auto it = items.begin(); it != items.end(); ++it) {
+                if (!it->item.dropped) {
+                    allDropped = false;
+                    break;
+                }
+            }
+
+            if (allDropped) {
+                animationStopped = true;
+            }
         }
 
         Uint32 currentTime = SDL_GetTicks();
         if (currentTime - startTime >= ROUND_TIME) { 
-            // animationStopped = true;
             startTime = SDL_GetTicks();
             this -> level += 1;
         }
