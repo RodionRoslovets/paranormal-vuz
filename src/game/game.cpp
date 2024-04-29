@@ -166,7 +166,7 @@ void Game::run(SDL_Window* mWindow, SDL_Renderer* mRenderer) {
                 quit = true;
             }
 
-            if(e.type == SDL_KEYDOWN){
+            if(e.type == SDL_KEYDOWN && !animationStopped){
                 player.move(e.key.keysym.scancode, playerX, playerY, PLAYER_MOVE_STEP, playerRotate, WINDOW_WIDTH, WINDOW_HEIGHT);
             }
         }
