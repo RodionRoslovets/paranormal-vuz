@@ -73,22 +73,24 @@ bool Game::init() {
     return true;
 }
 
-void generatePoints(int numPoints, int imgWidth, int imgHeight) {
+void generatePoints(int numPoints, int imgWidth, int imgHeight, int playerX, int playerY, int playerWidth, int playerHeight) {
     std::vector<Point> points;
-    const int minDistance = 150;
+    const int minDistance = 200;
 
     for (int i = 0; i < numPoints; ++i) {
         int x, y;
         bool validPoint = false;
 
-        // Генерация координат до тех пор, пока не будет найдена точка, удовлетворяющая условию
         while (!validPoint) {
             x = std::rand() % (WINDOW_WIDTH - imgWidth);
             y = std::rand() % (WINDOW_HEIGHT - imgHeight);
 
+            if (std::abs(x - playerX) < minDistance && std::abs(y - playerY) < minDistance) {
+                continue;
+            }
+
             validPoint = true;
 
-            // Проверяем новую точку на расстояние до уже существующих точек
             for (const auto& existingPoint : points) {
                 int dx = x - existingPoint.x;
                 int dy = y - existingPoint.y;
@@ -120,7 +122,6 @@ void Game::run() {
     std::srand(std::time(nullptr));
 
     bool quit = false;
-    generatePoints(items.size(), ghost.width, ghost.height);
     size_t currentPointIndex = 0;
     int ghostX = 0;
     int ghostY = 0;
@@ -128,6 +129,7 @@ void Game::run() {
     int playerY =  WINDOW_HEIGHT - player.height - 10;
     int playerRotate = 0;
     bool animationStopped = false;
+    generatePoints(items.size(), ghost.width, ghost.height, playerX, playerY, player.width, player.height);
     player.setItems(&items);
     this->level = 1;
 
