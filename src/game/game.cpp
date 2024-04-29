@@ -5,7 +5,7 @@ const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
 const int PLAYER_MOVE_STEP = 10;
 const int GHOST_MOVE_STEP = 1;
-const int ROUND_TIME = 60000;
+const int ROUND_TIME = 30000;
 
 std::vector<FurnitureItem> items;
 int numPoints = 5;
