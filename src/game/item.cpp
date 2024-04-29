@@ -5,11 +5,6 @@
 
 Item::Item() : texture(nullptr), textureDropped(nullptr) {}
 
-Item::~Item() {
-    // SDL_DestroyTexture(texture);
-    // SDL_DestroyTexture(textureDropped);
-}
-
 int Item::init(SDL_Renderer* renderer){
     SDL_Surface* itemSurface = IMG_Load("chair.png");
     if (itemSurface == nullptr) {

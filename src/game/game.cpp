@@ -106,6 +106,16 @@ void generatePoints(int numPoints, int imgWidth, int imgHeight) {
     }
 }
 
+bool checkCollision(int x, int y, const FurnitureItem& target) {
+    if ((x + target.item.width >= target.coords.x && x <= target.coords.x + target.item.width &&
+        y +  target.item.height >= target.coords.y && y <= target.coords.y + target.item.height) ||
+        (x == target.coords.x && y == target.coords.y)) {
+        return true;
+    }
+
+    return false;
+}
+
 void Game::run() {
     std::srand(std::time(nullptr));
 
@@ -114,11 +124,12 @@ void Game::run() {
     size_t currentPointIndex = 0;
     int ghostX = 0;
     int ghostY = 0;
-    int playerX= 400;
-    int playerY = 400;
+    int playerX= WINDOW_WIDTH - player.width - 10;
+    int playerY =  WINDOW_HEIGHT - player.height - 10;
     int playerRotate = 0;
     bool animationStopped = false;
     player.setItems(&items);
+    this->level = 1;
 
     SDL_Event e;
 
@@ -137,22 +148,23 @@ void Game::run() {
 
         if (!animationStopped) {
             if (ghostX != items[currentPointIndex].coords.x) {
-                ghostX += (items[currentPointIndex].coords.x - ghostX) > 0 ? GHOST_MOVE_STEP : -GHOST_MOVE_STEP;
+                ghostX += (items[currentPointIndex].coords.x - ghostX) > 0 ? GHOST_MOVE_STEP * this->level: -GHOST_MOVE_STEP * this->level;
             }
             if (ghostY != items[currentPointIndex].coords.y) {
-                ghostY += (items[currentPointIndex].coords.y - ghostY) > 0 ? GHOST_MOVE_STEP : -GHOST_MOVE_STEP;
+                ghostY += (items[currentPointIndex].coords.y - ghostY) > 0 ? GHOST_MOVE_STEP * this->level : -GHOST_MOVE_STEP * this->level;
             }
 
-            if (ghostX == items[currentPointIndex].coords.x && ghostY == items[currentPointIndex].coords.y) {
+            if (checkCollision(ghostX, ghostY, items[currentPointIndex])){
                 items[currentPointIndex].item.dropped = true;
                 currentPointIndex = (currentPointIndex + 1) % items.size();
             }
         }
 
         Uint32 currentTime = SDL_GetTicks();
-
         if (currentTime - startTime >= ROUND_TIME) { 
-            animationStopped = true; 
+            // animationStopped = true;
+            startTime = SDL_GetTicks();
+            this -> level += 1;
         }
 
         SDL_Delay(10);

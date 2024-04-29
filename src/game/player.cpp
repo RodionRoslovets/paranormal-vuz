@@ -38,53 +38,75 @@ void Player::render(SDL_Renderer* renderer, int x, int y, int degreese) {
 }
 
 void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rotate, int screenWidth, int screenHeight) {
-
     switch (keyCode) {
         case KEY_CODES::UP:
             std::cout << "Up pressed"  << std::endl;
+            rotate = -90;
             if(posY == 0){
                 break;
             }
+
+            for (auto it = this->begin(); it != this->end(); ++it) {
+                if (posY - step + this->height >= it->coords.y && posY - step <= it->coords.y + it->item.height &&
+                    posX + this->width > it->coords.x && posX < it->coords.x + it->item.width) {
+                    return;
+                }
+            }
+
             posY -= step;
-            rotate = -90;
             break;
         case KEY_CODES::DOWN:
             std::cout << "Down pressed"  << std::endl;
+            rotate = 90;
             if(posY == screenHeight - this->height){
                 break;
             }
+            for (auto it = this->begin(); it != this->end(); ++it) {
+                if (posY + step + this->height >= it->coords.y && posY + step <= it->coords.y + it->item.height &&
+                    posX + this->width > it->coords.x && posX < it->coords.x + it->item.width) {
+                    return; 
+                }
+            }
             posY += step;
-            rotate = 90;
             break;
         case KEY_CODES::LEFT:
             std::cout << "Left pressed"  << std::endl;
+            rotate = -180;
             if(posX == 0){
                 break;
             }
+            for (auto it = this->begin(); it != this->end(); ++it) {
+                if (posX - step + this->width >= it->coords.x && posX - step <= it->coords.x + it->item.width &&
+                    posY + this->height > it->coords.y && posY < it->coords.y + it->item.height) {
+                    return; 
+                }
+            }
             posX -= step;
-            rotate = -180;
             break;
         case KEY_CODES::RIGHT:
             std::cout << "Right pressed"  << std::endl;
+            rotate = 0;
             if(posX == screenWidth - this->width){
                 break;
             }
+            for (auto it = this->begin(); it != this->end(); ++it) {
+                if (posX + step + this->width >= it->coords.x && posX + step <= it->coords.x + it->item.width &&
+                    posY + this->height > it->coords.y && posY < it->coords.y + it->item.height) {
+                    return;
+                }
+            }
             posX += step;
-            rotate = 0;
             break;
         case KEY_CODES::SPACE:
-             for (auto it = this->begin(); it != this->end(); ++it) {
-                std::cout << "Координаты: (" << it->coords.x  << ", " << it->coords.y << ")" << std::endl;
-
-                if (posX + 100 < it -> coords.x || it -> coords.x + 100 < posX)
+            for (auto it = this->begin(); it != this->end(); ++it) {
+                if (posX + step + this -> width < it -> coords.x || it -> coords.x + it -> item.width + step < posX)
                     continue;
                 
-                if (posY + 100 < it -> coords.y || it -> coords.y + 100 < posY)
+                if (posY + step + this -> height < it -> coords.y || it -> coords.y + it -> item.height + step < posY)
                     continue;
                 
-                it -> item.dropped = false;
+                it -> item.dropped = !it -> item.dropped;
             }
-
             break;
         default:
             break;

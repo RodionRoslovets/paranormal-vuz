@@ -6,7 +6,6 @@ class Item{
         SDL_Texture* textureDropped;
     public:
         Item();
-        ~Item();
         
         bool isInited;
         int init(SDL_Renderer* renderer);

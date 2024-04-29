@@ -23,4 +23,5 @@ private:
     Ghost ghost;
     Player player;
     Menu menu;
+    int level;
 };
