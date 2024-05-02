@@ -5,14 +5,14 @@
 
 Item::Item() : texture(nullptr), textureDropped(nullptr) {}
 
-int Item::init(SDL_Renderer* renderer){
-    SDL_Surface* itemSurface = IMG_Load("chair.png");
+int Item::init(SDL_Renderer* renderer, const char* normal, const char* fallen){
+    SDL_Surface* itemSurface = IMG_Load(normal);
     if (itemSurface == nullptr) {
         std::cerr << "Unable to load image item! SDL_image Error: " << IMG_GetError() << std::endl;
         return -1;
     }
 
-    SDL_Surface* itemSurfaceDropped = IMG_Load("fallen-chair.png");
+    SDL_Surface* itemSurfaceDropped = IMG_Load(fallen);
     if (itemSurfaceDropped == nullptr) {
         std::cerr << "Unable to load image item! SDL_image Error: " << IMG_GetError() << std::endl;
         return -1;

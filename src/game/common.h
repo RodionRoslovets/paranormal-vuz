@@ -9,3 +9,8 @@ struct FurnitureItem{
     Point coords;
     Item item;
 };
+
+struct ItemImages{
+    const char* normal;
+    const char* fallen;
+};

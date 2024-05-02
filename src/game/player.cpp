@@ -11,7 +11,7 @@ Player::~Player() {
 }
 
 int Player::init(SDL_Renderer* renderer){
-    SDL_Surface* loadedSurface = IMG_Load("player.png");
+    SDL_Surface* loadedSurface = IMG_Load("assets/images/player.png");
     if (loadedSurface == nullptr) {
         std::cerr << "Unable to load image! SDL_image Error: " << IMG_GetError() << std::endl;
         return -1;
@@ -34,13 +34,13 @@ int Player::init(SDL_Renderer* renderer){
 
 void Player::render(SDL_Renderer* renderer, int x, int y, int degreese) {
     SDL_Rect renderRect = { x, y, this->width, this->height };
-    SDL_RenderCopyEx(renderer, texture, NULL, &renderRect, degreese, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(renderer, texture, NULL, &renderRect, degreese, NULL, degreese != 180 ? SDL_FLIP_NONE : SDL_FLIP_VERTICAL);
 }
 
 void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rotate, int screenWidth, int screenHeight) {
     switch (keyCode) {
         case KEY_CODES::UP:
-            rotate = -90;
+            rotate = 90;
             if(posY == 0){
                 break;
             }
@@ -55,7 +55,7 @@ void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rot
             posY -= step;
             break;
         case KEY_CODES::DOWN:
-            rotate = 90;
+            rotate = -90;
             if(posY == screenHeight - this->height){
                 break;
             }
@@ -68,7 +68,7 @@ void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rot
             posY += step;
             break;
         case KEY_CODES::LEFT:
-            rotate = -180;
+            rotate = 0;
             if(posX == 0){
                 break;
             }
@@ -81,7 +81,7 @@ void Player::move(SDL_Scancode keyCode, int& posX, int& posY, int step, int& rot
             posX -= step;
             break;
         case KEY_CODES::RIGHT:
-            rotate = 0;
+            rotate = 180;
             if(posX == screenWidth - this->width){
                 break;
             }

@@ -16,7 +16,7 @@ Menu::~Menu() {
 
 void Menu::init(SDL_Renderer* renderer) {
     m_renderer = renderer;
-    m_font = TTF_OpenFont("Jacquard.ttf", 56); 
+    m_font = TTF_OpenFont("assets/font/Jacquard.ttf", 56); 
 
     m_options.push_back("Play");
     m_options.push_back("Quit");

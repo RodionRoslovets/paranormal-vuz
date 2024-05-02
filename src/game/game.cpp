@@ -5,10 +5,10 @@ const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
 const int PLAYER_MOVE_STEP = 10;
 const int GHOST_MOVE_STEP = 1;
-const int ROUND_TIME = 3000;
+const int ROUND_TIME = 25000;
+const int NUM_ITEMS = 9;
 
 std::vector<FurnitureItem> items;
-int numPoints = 5;
 
 Game::Game() {}
 
@@ -19,12 +19,38 @@ Game::~Game() {
 }
 
 bool Game::init(SDL_Window* mWindow, SDL_Renderer* mRenderer) {
+    ItemImages images[NUM_ITEMS];
+
+    images[0] = {"assets/images/chair.png", "assets/images/fallen-chair.png"};
+    images[1] = {"assets/images/chair.png", "assets/images/fallen-chair.png"};
+    images[2] = {"assets/images/closet.png", "assets/images/closet-open.png"};
+    images[3] = {"assets/images/chair.png", "assets/images/fallen-chair.png"};
+    images[4] = {"assets/images/cat.png", "assets/images/cat-scared.png"};
+    images[5] = {"assets/images/chair.png", "assets/images/fallen-chair.png"};
+    images[6] = {"assets/images/table.png", "assets/images/table-fallen.png"};
+    images[7] = {"assets/images/chair.png", "assets/images/fallen-chair.png"};
+    images[8] = {"assets/images/closet.png", "assets/images/closet-open.png"};
+
+    SDL_Surface* loadedSurface = IMG_Load("assets/images/bg.png");
+    if (loadedSurface == nullptr) {
+        std::cerr << "Unable to load image! SDL_image Error: " << IMG_GetError() << std::endl;
+        return -1;
+    }
+
+    this -> bgTexture = SDL_CreateTextureFromSurface(mRenderer, loadedSurface);
+    if (bgTexture == nullptr) {
+        std::cerr << "Unable to create texture from image! SDL Error: " << SDL_GetError() << std::endl;
+        return -1;
+    }
+
+    SDL_FreeSurface(loadedSurface);
+
     ghost.init(mRenderer);
     player.init(mRenderer);
 
-    for (int i = 0; i < numPoints; ++i) {
+    for (int i = 0; i < NUM_ITEMS; ++i) {
         FurnitureItem item;
-        item.item.init(mRenderer);
+        item.item.init(mRenderer, images[i].normal, images[i].fallen);
 
         if(!item.item.isInited){
             std::cerr << "Item could not be created! SDL Error: " << SDL_GetError() << std::endl;
@@ -44,11 +70,11 @@ bool Game::init(SDL_Window* mWindow, SDL_Renderer* mRenderer) {
     return true;
 }
 
-void generatePoints(int numPoints, int imgWidth, int imgHeight, int playerX, int playerY, int playerWidth, int playerHeight) {
+void generatePoints(int NUM_ITEMS, int imgWidth, int imgHeight, int playerX, int playerY, int playerWidth, int playerHeight) {
     std::vector<Point> points;
     const int minDistance = 200;
 
-    for (int i = 0; i < numPoints; ++i) {
+    for (int i = 0; i < NUM_ITEMS; ++i) {
         int x, y;
         bool validPoint = false;
 
@@ -211,6 +237,9 @@ void Game::run(SDL_Window* mWindow, SDL_Renderer* mRenderer) {
 
         SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xFF);
         SDL_RenderClear(mRenderer);
+
+        SDL_Rect renderRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+        SDL_RenderCopy(mRenderer, this->bgTexture, NULL, &renderRect);
 
         player.render(mRenderer, playerX, playerY, playerRotate);
         ghost.render(mRenderer, ghostX, ghostY);

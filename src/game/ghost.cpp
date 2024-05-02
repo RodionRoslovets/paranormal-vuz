@@ -11,7 +11,7 @@ Ghost::~Ghost() {
 }
 
 int Ghost::init(SDL_Renderer* renderer){
-    SDL_Surface* loadedSurface = IMG_Load("ghost.png");
+    SDL_Surface* loadedSurface = IMG_Load("assets/images/ghost.png");
     if (loadedSurface == nullptr) {
         std::cerr << "Unable to load image! SDL_image Error: " << IMG_GetError() << std::endl;
         return -1;

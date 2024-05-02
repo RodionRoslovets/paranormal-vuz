@@ -23,6 +23,7 @@ public:
 private:
     Ghost ghost;
     Player player;
+    SDL_Texture* bgTexture;
     int level;
     void saveResult(Uint32 gameTime);
 };
